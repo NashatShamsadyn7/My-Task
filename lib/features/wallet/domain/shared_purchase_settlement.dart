@@ -23,8 +23,13 @@ abstract final class SharedPurchaseCalculator {
     required int activeMembers,
     required bool payerIsMember,
   }) {
-    if (totalIqd <= 0) throw ArgumentError.value(totalIqd, 'totalIqd', 'Must be positive');
-    if (activeMembers <= 0) throw ArgumentError.value(activeMembers, 'activeMembers', 'Must be positive');
+    if (totalIqd <= 0) {
+      throw ArgumentError.value(totalIqd, 'totalIqd', 'Must be positive');
+    }
+    if (activeMembers <= 0) {
+      throw ArgumentError.value(
+          activeMembers, 'activeMembers', 'Must be positive');
+    }
     final baseShare = totalIqd ~/ activeMembers;
     final remainder = totalIqd % activeMembers;
     final payerOwnShare = payerIsMember ? baseShare + remainder : 0;

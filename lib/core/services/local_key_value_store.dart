@@ -13,13 +13,15 @@ class SharedPreferencesStore implements LocalKeyValueStore {
 
   final SharedPreferencesAsync _preferences;
 
-  factory SharedPreferencesStore.create() => SharedPreferencesStore(SharedPreferencesAsync());
+  factory SharedPreferencesStore.create() =>
+      SharedPreferencesStore(SharedPreferencesAsync());
 
   @override
   Future<String?> read(String key) => _preferences.getString(key);
 
   @override
-  Future<void> write(String key, String value) => _preferences.setString(key, value);
+  Future<void> write(String key, String value) =>
+      _preferences.setString(key, value);
 
   @override
   Future<void> remove(String key) => _preferences.remove(key);

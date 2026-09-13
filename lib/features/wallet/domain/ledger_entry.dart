@@ -1,4 +1,9 @@
-enum LedgerAccount { personalWallet, apartmentFund, memberReceivable, memberPayable }
+enum LedgerAccount {
+  personalWallet,
+  apartmentFund,
+  memberReceivable,
+  memberPayable
+}
 
 enum LedgerDirection { credit, debit }
 
