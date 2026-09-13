@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/localization/app_strings.dart';
 import '../../../core/services/app_state.dart';
@@ -243,10 +244,33 @@ class _TasksTab extends StatelessWidget {
 
 class _MoreTab extends StatelessWidget {
   const _MoreTab();
+
+  static final Uri _androidDownloadUrl = Uri.parse(
+      'https://github.com/NashatShamsadyn7/My-Task/releases/latest');
+
+  Future<void> _openAndroidDownload(BuildContext context) async {
+    final opened = await launchUrl(_androidDownloadUrl,
+        mode: LaunchMode.externalApplication);
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Could not open the Android download page.')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final language = context.watch<LanguageController>();
     return ListView(padding: const EdgeInsets.all(20), children: [
+      const SectionHeader(title: 'Android'),
+      const SizedBox(height: 8),
+      AppCard(
+          child: ListTile(
+              leading: const Icon(Icons.android_rounded),
+              title: const Text('Download My Task APK'),
+              subtitle: const Text('Get the latest Android version from GitHub'),
+              trailing: const Icon(Icons.open_in_new_rounded),
+              onTap: () => _openAndroidDownload(context))),
+      const SizedBox(height: 20),
       SectionHeader(title: s(context, 'language')),
       const SizedBox(height: 8),
       AppCard(
