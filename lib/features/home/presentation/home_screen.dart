@@ -63,16 +63,20 @@ class HomeScreen extends StatelessWidget {
                     }),
                 ListTile(
                     leading: const Icon(Icons.assignment_outlined),
-                    title: Text(s(context, 'academicTask'))),
+                    title: Text(s(context, 'academicTask')),
+                    onTap: () => _showComingSoon(context, sheetContext)),
                 ListTile(
                     leading: const Icon(Icons.quiz_outlined),
-                    title: Text(s(context, 'quizExam'))),
+                    title: Text(s(context, 'quizExam')),
+                    onTap: () => _showComingSoon(context, sheetContext)),
                 ListTile(
                     leading: const Icon(Icons.note_add_outlined),
-                    title: Text(s(context, 'note'))),
+                    title: Text(s(context, 'note')),
+                    onTap: () => _showComingSoon(context, sheetContext)),
                 ListTile(
                     leading: const Icon(Icons.shopping_basket_outlined),
-                    title: Text(s(context, 'purchase'))),
+                    title: Text(s(context, 'purchase')),
+                    onTap: () => _showComingSoon(context, sheetContext)),
               ]),
             )));
   }
@@ -101,6 +105,13 @@ class HomeScreen extends StatelessWidget {
                     child: Text(s(context, 'save'))),
               ],
             ));
+  }
+
+  void _showComingSoon(BuildContext context, BuildContext sheetContext) {
+    Navigator.of(sheetContext).pop();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(s(context, 'comingSoon')
+            .replaceFirst('{section}', s(context, 'more')))));
   }
 }
 
