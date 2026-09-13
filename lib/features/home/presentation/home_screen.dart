@@ -44,30 +44,60 @@ class HomeScreen extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (context) => const SafeArea(
+      builder: (context) => SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Wrap(
             runSpacing: 8,
             children: [
               ListTile(
-                  leading: Icon(Icons.check_circle_outline),
-                  title: Text('مهمة شخصية')),
-              ListTile(
+                  leading: const Icon(Icons.check_circle_outline),
+                  title: const Text('مهمة شخصية'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showTaskForm(context);
+                  }),
+              const ListTile(
                   leading: Icon(Icons.assignment_outlined),
                   title: Text('واجب جامعي')),
-              ListTile(
+              const ListTile(
                   leading: Icon(Icons.quiz_outlined),
                   title: Text('Quiz أو امتحان')),
-              ListTile(
+              const ListTile(
                   leading: Icon(Icons.note_add_outlined),
                   title: Text('ملاحظة')),
-              ListTile(
+              const ListTile(
                   leading: Icon(Icons.shopping_basket_outlined),
                   title: Text('عملية شراء')),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showTaskForm(BuildContext context) {
+    var title = '';
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('مهمة شخصية جديدة'),
+        content: TextField(
+            autofocus: true,
+            onChanged: (value) => title = value,
+            decoration: const InputDecoration(hintText: 'اكتب المهمة')),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('إلغاء')),
+          FilledButton(
+              onPressed: () async {
+                if (title.trim().isEmpty) return;
+                await context.read<AppState>().addTask(title);
+                if (dialogContext.mounted) Navigator.pop(dialogContext);
+              },
+              child: const Text('حفظ')),
+        ],
       ),
     );
   }
@@ -79,6 +109,7 @@ class _TabContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (index == 2) return const _TasksTab();
     if (index != 0) {
       return Center(
           child: Text(
@@ -116,6 +147,29 @@ class _TabContent extends StatelessWidget {
           Expanded(child: _Balance(label: 'رصيد الشقة', value: '٠ د.ع'))
         ]),
       ],
+    );
+  }
+}
+
+class _TasksTab extends StatelessWidget {
+  const _TasksTab();
+  @override
+  Widget build(BuildContext context) {
+    final tasks = context.watch<AppState>().tasks;
+    if (tasks.isEmpty) {
+      return const Center(
+          child: Text('لا توجد مهام حالياً\nاضغط إضافة لإنشاء أول مهمة.',
+              textAlign: TextAlign.center));
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.all(20),
+      itemCount: tasks.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (_, index) => AppCard(
+          child: ListTile(
+              leading: const Icon(Icons.radio_button_unchecked),
+              title: Text(tasks[index].title),
+              subtitle: const Text('مهمة شخصية'))),
     );
   }
 }
