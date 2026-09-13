@@ -9,7 +9,7 @@ abstract final class AppStrings {
   }
 
   static const _ku = {
-    'appTitle': 'خوێندکاری زانکۆ',
+    'appTitle': 'My Task',
     'home': 'سەرەکی',
     'university': 'زانکۆ',
     'tasks': 'ئەرکەکان',
@@ -54,7 +54,7 @@ abstract final class AppStrings {
   };
 
   static const _ar = {
-    'appTitle': 'طالب الجامعة',
+    'appTitle': 'My Task',
     'home': 'الرئيسية',
     'university': 'الجامعة',
     'tasks': 'المهام',

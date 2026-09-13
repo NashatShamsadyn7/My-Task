@@ -1,5 +1,5 @@
 name: talib_al_jamia
-description: طالب الجامعة - إدارة الحياة الجامعية والشقة والمال.
+description: My Task - personal university life management.
 publish_to: none
 version: 0.1.0+1
 
@@ -19,6 +19,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+
+flutter_launcher_icons:
+  android: true
+  image_path: assets/images/my_task_logo.png

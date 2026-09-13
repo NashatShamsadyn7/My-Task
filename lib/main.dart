@@ -40,7 +40,7 @@ class TalibAlJamiaApp extends StatelessWidget {
       child: Consumer<LanguageController>(
         builder: (context, language, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'خوێندکاری زانکۆ',
+          title: 'My Task',
           theme: AppTheme.light,
           locale: language.locale,
           supportedLocales: const [Locale('ku'), Locale('ar')],
