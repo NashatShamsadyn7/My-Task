@@ -29,11 +29,13 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addTask(String title) async {
+  Future<void> addTask(String title,
+      {PersonalTaskCategory category = PersonalTaskCategory.personal}) async {
     final task = PersonalTask(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         title: title.trim(),
-        createdAt: DateTime.now());
+        createdAt: DateTime.now(),
+        category: category);
     _tasks = [..._tasks, task];
     notifyListeners();
     await _taskRepository.save(_tasks);

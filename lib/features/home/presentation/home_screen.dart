@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/localization/app_strings.dart';
 import '../../../core/services/app_state.dart';
 import '../../../core/services/language_controller.dart';
+import '../../../features/tasks/domain/personal_task.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/section_header.dart';
 
@@ -64,32 +65,50 @@ class HomeScreen extends StatelessWidget {
                 ListTile(
                     leading: const Icon(Icons.assignment_outlined),
                     title: Text(s(context, 'academicTask')),
-                    onTap: () => _showComingSoon(context, sheetContext)),
+                    onTap: () => _openTaskForm(context, sheetContext,
+                        formTitle: s(context, 'academicTask'))),
                 ListTile(
                     leading: const Icon(Icons.quiz_outlined),
                     title: Text(s(context, 'quizExam')),
-                    onTap: () => _showComingSoon(context, sheetContext)),
+                    onTap: () => _openTaskForm(context, sheetContext,
+                        formTitle: s(context, 'quizExam'))),
                 ListTile(
                     leading: const Icon(Icons.note_add_outlined),
                     title: Text(s(context, 'note')),
-                    onTap: () => _showComingSoon(context, sheetContext)),
+                    onTap: () => _openTaskForm(context, sheetContext,
+                        formTitle: s(context, 'note'))),
                 ListTile(
                     leading: const Icon(Icons.shopping_basket_outlined),
                     title: Text(s(context, 'purchase')),
-                    onTap: () => _showComingSoon(context, sheetContext)),
+                    onTap: () => _openTaskForm(context, sheetContext,
+                        formTitle: s(context, 'purchase'),
+                        category: PersonalTaskCategory.shopping)),
               ]),
             )));
   }
 
-  void _showTaskForm(BuildContext context) {
-    var title = '';
+  void _openTaskForm(BuildContext context, BuildContext sheetContext,
+      {required String formTitle,
+      PersonalTaskCategory category = PersonalTaskCategory.other}) {
+    Navigator.of(sheetContext).pop();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted) {
+        _showTaskForm(context, formTitle: formTitle, category: category);
+      }
+    });
+  }
+
+  void _showTaskForm(BuildContext context,
+      {String? formTitle,
+      PersonalTaskCategory category = PersonalTaskCategory.personal}) {
+    var taskTitle = '';
     showDialog<void>(
         context: context,
         builder: (dialogContext) => AlertDialog(
-              title: Text(s(context, 'newPersonalTask')),
+              title: Text(formTitle ?? s(context, 'newPersonalTask')),
               content: TextField(
                   autofocus: true,
-                  onChanged: (value) => title = value,
+                  onChanged: (value) => taskTitle = value,
                   decoration:
                       InputDecoration(hintText: s(context, 'writeTask'))),
               actions: [
@@ -98,8 +117,10 @@ class HomeScreen extends StatelessWidget {
                     child: Text(s(context, 'cancel'))),
                 FilledButton(
                     onPressed: () async {
-                      if (title.trim().isEmpty) return;
-                      await context.read<AppState>().addTask(title);
+                      if (taskTitle.trim().isEmpty) return;
+                      await context
+                          .read<AppState>()
+                          .addTask(taskTitle, category: category);
                       if (dialogContext.mounted) Navigator.pop(dialogContext);
                     },
                     child: Text(s(context, 'save'))),
@@ -107,12 +128,6 @@ class HomeScreen extends StatelessWidget {
             ));
   }
 
-  void _showComingSoon(BuildContext context, BuildContext sheetContext) {
-    Navigator.of(sheetContext).pop();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(s(context, 'comingSoon')
-            .replaceFirst('{section}', s(context, 'more')))));
-  }
 }
 
 class _TabContent extends StatelessWidget {
@@ -141,7 +156,8 @@ class _TabContent extends StatelessWidget {
           child: ListTile(
               leading: const Icon(Icons.school_outlined),
               title: Text(s(context, 'noLectures')),
-              subtitle: Text(s(context, 'addSubjectsSchedule')))),
+              subtitle: Text(s(context, 'addSubjectsSchedule')),
+              onTap: () => context.read<AppState>().selectTab(1))),
       const SizedBox(height: 20),
       SectionHeader(title: s(context, 'upcoming')),
       const SizedBox(height: 8),
@@ -149,7 +165,8 @@ class _TabContent extends StatelessWidget {
           child: ListTile(
               leading: const Icon(Icons.event_note_outlined),
               title: Text(s(context, 'noUpcoming')),
-              subtitle: Text(s(context, 'addTaskForDeadline')))),
+              subtitle: Text(s(context, 'addTaskForDeadline')),
+              onTap: () => context.read<AppState>().selectTab(2))),
       const SizedBox(height: 20),
       SectionHeader(title: s(context, 'financialSnapshot')),
       const SizedBox(height: 8),
