@@ -14,29 +14,29 @@ class _MemoryTaskRepository implements PersonalTaskRepository {
 }
 
 void main() {
-  testWidgets('renders the Arabic dashboard and primary navigation',
+  testWidgets('renders the Kurdish dashboard and primary navigation',
       (tester) async {
     await tester
         .pumpWidget(TalibAlJamiaApp(state: AppState(_MemoryTaskRepository())));
 
-    expect(find.text('رتّب يومك بهدوء'), findsOneWidget);
-    expect(find.text('الرئيسية'), findsAtLeastNWidgets(1));
-    expect(find.text('الجامعة'), findsOneWidget);
-    expect(find.text('إضافة'), findsOneWidget);
+    expect(find.text('ڕۆژەکەت بە ئارامی ڕێکبخە'), findsOneWidget);
+    expect(find.text('سەرەکی'), findsAtLeastNWidgets(1));
+    expect(find.text('زانکۆ'), findsOneWidget);
+    expect(find.text('زیادکردن'), findsOneWidget);
   });
 
   testWidgets('adds and displays a personal task', (tester) async {
     await tester
         .pumpWidget(TalibAlJamiaApp(state: AppState(_MemoryTaskRepository())));
 
-    await tester.tap(find.text('إضافة'));
+    await tester.tap(find.text('زیادکردن'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('مهمة شخصية'));
+    await tester.tap(find.text('ئەرکی کەسی'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'شراء الماء');
-    await tester.tap(find.text('حفظ'));
+    await tester.tap(find.text('پاشەکەوت'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('المهام'));
+    await tester.tap(find.text('ئەرکەکان'));
     await tester.pumpAndSettle();
 
     expect(find.text('شراء الماء'), findsOneWidget);
