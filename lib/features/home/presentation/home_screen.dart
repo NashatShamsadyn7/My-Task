@@ -111,6 +111,7 @@ class _TabContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (index == 1) return const _AcademicTab();
     if (index == 2) return const _TasksTab();
     if (index != 0) {
       return Center(
@@ -150,6 +151,75 @@ class _TabContent extends StatelessWidget {
         ]),
       ],
     );
+  }
+}
+
+class _AcademicTab extends StatelessWidget {
+  const _AcademicTab();
+  @override
+  Widget build(BuildContext context) {
+    final subjects = context.watch<AppState>().subjects;
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        FilledButton.icon(
+            onPressed: () => _addSubject(context),
+            icon: const Icon(Icons.add),
+            label: const Text('إضافة مادة')),
+        const SizedBox(height: 16),
+        if (subjects.isEmpty)
+          const Center(
+              child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: Text(
+                      'لا توجد مواد حالياً\nأضف أول مادة وجدولها الدراسي.',
+                      textAlign: TextAlign.center)))
+        else
+          ...subjects.map((subject) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: AppCard(
+                  child: ListTile(
+                      leading: CircleAvatar(
+                          backgroundColor: Color(subject.colorValue)),
+                      title: Text(subject.name),
+                      subtitle: Text(subject.code ?? 'مادة جامعية'))))),
+      ],
+    );
+  }
+
+  void _addSubject(BuildContext context) {
+    var name = '';
+    var code = '';
+    showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+              title: const Text('مادة جديدة'),
+              content: Column(mainAxisSize: MainAxisSize.min, children: [
+                TextField(
+                    autofocus: true,
+                    decoration: const InputDecoration(labelText: 'اسم المادة'),
+                    onChanged: (value) => name = value),
+                const SizedBox(height: 12),
+                TextField(
+                    decoration:
+                        const InputDecoration(labelText: 'الرمز (اختياري)'),
+                    onChanged: (value) => code = value)
+              ]),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: const Text('إلغاء')),
+                FilledButton(
+                    onPressed: () async {
+                      if (name.trim().isEmpty) return;
+                      await context
+                          .read<AppState>()
+                          .addSubject(name, code: code);
+                      if (dialogContext.mounted) Navigator.pop(dialogContext);
+                    },
+                    child: const Text('حفظ'))
+              ],
+            ));
   }
 }
 
