@@ -5,6 +5,7 @@
 .flutter-plugins-dependencies
 .packages
 build/
+.firebase/
 coverage/
 *.iml
 *.log
