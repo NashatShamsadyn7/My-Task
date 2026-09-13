@@ -1,11 +1,11 @@
 {
-    "name": "talib_al_jamia",
-    "short_name": "talib_al_jamia",
+    "name": "My Task",
+    "short_name": "My Task",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "My Task - personal university life management.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
