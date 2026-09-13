@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'core/services/app_state.dart';
 import 'core/services/language_controller.dart';
 import 'core/services/local_key_value_store.dart';
+import 'core/services/supabase_bootstrap.dart';
 import 'features/tasks/data/personal_task_repository.dart';
 import 'features/academic/data/subject_repository.dart';
 import 'core/theme/app_theme.dart';
@@ -13,6 +14,7 @@ import 'features/home/presentation/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeSupabaseIfConfigured();
   final store = SharedPreferencesStore.create();
   final state = AppState(LocalPersonalTaskRepository(store),
       subjectRepository: LocalSubjectRepository(store));
