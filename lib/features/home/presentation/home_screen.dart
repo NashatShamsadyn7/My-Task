@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (context) => SafeArea(
+      builder: (sheetContext) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Wrap(
@@ -54,8 +54,10 @@ class HomeScreen extends StatelessWidget {
                   leading: const Icon(Icons.check_circle_outline),
                   title: const Text('مهمة شخصية'),
                   onTap: () {
-                    Navigator.pop(context);
-                    _showTaskForm(context);
+                    Navigator.of(sheetContext).pop();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (context.mounted) _showTaskForm(context);
+                    });
                   }),
               const ListTile(
                   leading: Icon(Icons.assignment_outlined),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:talib_al_jamia/core/services/app_state.dart';
 import 'package:talib_al_jamia/features/tasks/data/personal_task_repository.dart';
@@ -22,5 +23,22 @@ void main() {
     expect(find.text('الرئيسية'), findsAtLeastNWidgets(1));
     expect(find.text('الجامعة'), findsOneWidget);
     expect(find.text('إضافة'), findsOneWidget);
+  });
+
+  testWidgets('adds and displays a personal task', (tester) async {
+    await tester
+        .pumpWidget(TalibAlJamiaApp(state: AppState(_MemoryTaskRepository())));
+
+    await tester.tap(find.text('إضافة'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('مهمة شخصية'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'شراء الماء');
+    await tester.tap(find.text('حفظ'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('المهام'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('شراء الماء'), findsOneWidget);
   });
 }
